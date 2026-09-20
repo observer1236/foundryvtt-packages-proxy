@@ -8,6 +8,8 @@ FoundryVTT 的 GitHub/GitLab 下载加速解决方案，包含后端代理服务
 - ✅ **多代理自动切换** - 失败时自动尝试下一个代理
 - ✅ **统一代理端点** - `/proxy/{url}` 同时支持 GitHub 和 GitLab
 - ✅ **FVTT API 缓存** - 30 分钟 TTL，减少 API 请求
+- ✅ **FVTT v14.368 包协议** - 公共 package index、entitlements、details 代理
+- ✅ **旧补丁兼容** - `/api/fvtt/packages` 自动转换为旧 `/packages/get` 响应格式
 - ✅ **Docker 部署** - 一键部署
 - ✅ **HTTPS 支持** - 可配置 SSL 证书
 
@@ -55,6 +57,7 @@ npm start
 ├── client/                 # 客户端补丁
 │   ├── package.mjs        # 替换 FVTT 的 package.mjs
 │   └── views.mjs          # 替换 FVTT 的 views.mjs
+├── v14.368/                # 与 FVTT v14.368 匹配的补丁
 ├── config.example.yaml    # 配置模板
 ├── Dockerfile             # Docker 构建
 └── docker-compose.yml     # Docker Compose
@@ -70,6 +73,9 @@ npm start
 | `/proxy/github/{url}` | ALL | GitHub 代理 |
 | `/proxy/gitlab/{url}` | ALL | GitLab 代理 |
 | `/api/fvtt/packages` | POST | FVTT 包列表 API (带缓存) |
+| `/api/fvtt/index` | GET | v14.368 公共包索引 (带 URL 重写) |
+| `/api/fvtt/details/{id}` | GET | v14.368 单包详情 |
+| `/api/fvtt/entitlements` | POST | v14.368 授权包列表 |
 | `/api/fvtt/auth` | POST | FVTT 认证 API |
 
 ### 使用示例
@@ -170,6 +176,13 @@ server:
   port: 3000
   host: "0.0.0.0"
   publicUrl: "https://your-server.com"
+
+# 可选：上游 FVTT 包服务地址
+# fvtt:
+#   packageIndexUrl: "https://r2.foundryvtt.com/package-api-public/index-latest.json"
+#   packageIndexFallbackUrl: "https://foundryvtt.com/_api/packages/index/"
+#   entitlementsUrl: "https://api.foundryvtt.com/_api/packages/entitlements/"
+#   authUrl: "https://foundryvtt.com/_api/packages/auth"
 
 proxies:
   github:

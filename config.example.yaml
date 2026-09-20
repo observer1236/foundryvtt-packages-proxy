@@ -33,6 +33,14 @@ proxies:
   # 健康检查间隔 (毫秒)
   healthCheckInterval: 60000
 
+# FVTT v14.368 上游包接口
+fvtt:
+  packageIndexUrl: "https://r2.foundryvtt.com/package-api-public/index-latest.json"
+  packageIndexFallbackUrl: "https://foundryvtt.com/_api/packages/index/"
+  entitlementsUrl: "https://api.foundryvtt.com/_api/packages/entitlements/"
+  authUrl: "https://foundryvtt.com/_api/packages/auth"
+  timeout: 15000
+
 # FVTT API 缓存配置
 cache:
   enabled: true
