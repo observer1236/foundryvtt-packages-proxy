@@ -18,6 +18,8 @@ const GITHUB_DOMAINS = [
     'gist.githubusercontent.com',
     'codeload.github.com',
     'objects.githubusercontent.com',
+    'release-assets.githubusercontent.com',
+    'githubusercontent.com',
     'api.github.com'
 ];
 
@@ -36,6 +38,10 @@ function matchesDomains(url, domains) {
     } catch {
         return false;
     }
+}
+
+function isAllowedTarget(url) {
+    return matchesDomains(url, [...GITHUB_DOMAINS, ...GITLAB_DOMAINS]);
 }
 
 /**
@@ -99,6 +105,14 @@ function proxyRequest(targetUrl, req, res, redirectCount = 0) {
             const location = proxyRes.headers.location;
             // 解析重定向 URL (可能是相对路径)
             const redirectUrl = new URL(location, targetUrl).href;
+            if (!isAllowedTarget(redirectUrl)) {
+                proxyRes.resume();
+                logger.error(`Blocked redirect outside the allow-list: ${redirectUrl}`);
+                return res.status(502).json({
+                    error: 'Blocked redirect target',
+                    url: redirectUrl
+                });
+            }
             logger.info(`Following redirect: ${statusCode} -> ${redirectUrl}`);
 
             // 消费当前响应体

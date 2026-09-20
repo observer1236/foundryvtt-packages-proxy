@@ -32,6 +32,13 @@ const defaultConfig = {
         timeout: 10000,
         healthCheckInterval: 60000
     },
+    fvtt: {
+        packageIndexUrl: 'https://r2.foundryvtt.com/package-api-public/index-latest.json',
+        packageIndexFallbackUrl: 'https://foundryvtt.com/_api/packages/index/',
+        entitlementsUrl: 'https://api.foundryvtt.com/_api/packages/entitlements/',
+        authUrl: 'https://foundryvtt.com/_api/packages/auth',
+        timeout: 15000
+    },
     cache: {
         enabled: true,
         ttl: 1800,
@@ -97,6 +104,21 @@ function loadConfig() {
     }
     if (process.env.LOG_LEVEL) {
         config.logging.level = process.env.LOG_LEVEL;
+    }
+    if (process.env.FVTT_PACKAGE_INDEX_URL) {
+        config.fvtt.packageIndexUrl = process.env.FVTT_PACKAGE_INDEX_URL;
+    }
+    if (process.env.FVTT_PACKAGE_INDEX_FALLBACK_URL) {
+        config.fvtt.packageIndexFallbackUrl = process.env.FVTT_PACKAGE_INDEX_FALLBACK_URL;
+    }
+    if (process.env.FVTT_PACKAGE_OWNED_URL) {
+        config.fvtt.entitlementsUrl = process.env.FVTT_PACKAGE_OWNED_URL;
+    }
+    if (process.env.FVTT_PACKAGE_AUTH_URL) {
+        config.fvtt.authUrl = process.env.FVTT_PACKAGE_AUTH_URL;
+    }
+    if (process.env.FVTT_PACKAGE_TIMEOUT_MS) {
+        config.fvtt.timeout = parseInt(process.env.FVTT_PACKAGE_TIMEOUT_MS, 10);
     }
 
     return config;

@@ -20,7 +20,7 @@ if (config.cors.enabled) {
         origin: config.cors.origins.includes('*') ? '*' : config.cors.origins,
         methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
         allowedHeaders: ['Content-Type', 'Authorization'],
-        credentials: true
+        credentials: !config.cors.origins.includes('*')
     }));
 }
 
@@ -60,6 +60,9 @@ app.get('/', (req, res) => {
             health: '/api/health',
             proxies: '/api/proxies',
             fvttPackages: '/api/fvtt/packages',
+            fvttIndex: '/api/fvtt/index',
+            fvttDetails: '/api/fvtt/details/{id}',
+            fvttEntitlements: '/api/fvtt/entitlements',
             githubProxy: '/proxy/github/{url}',
             gitlabProxy: '/proxy/gitlab/{url}'
         }
@@ -121,6 +124,8 @@ function startServer() {
         logger.info(`  Health:        ${publicUrl}/api/health`);
         logger.info(`  Proxy List:    ${publicUrl}/api/proxies`);
         logger.info(`  FVTT Packages: ${publicUrl}/api/fvtt/packages`);
+        logger.info(`  FVTT Index:    ${publicUrl}/api/fvtt/index`);
+        logger.info(`  FVTT Details:  ${publicUrl}/api/fvtt/details/{id}`);
         logger.info(`  GitHub Proxy:  ${publicUrl}/proxy/github/{url}`);
         logger.info(`  GitLab Proxy:  ${publicUrl}/proxy/gitlab/{url}`);
         logger.info('========================================');
