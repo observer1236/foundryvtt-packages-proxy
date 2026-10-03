@@ -1,14 +1,14 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import fs from 'node:fs';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import {readArchiveFile} from './helpers/zip.js';
 
-const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../v14.368');
+const archive = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../../v14.368fix.zip');
 
 test('v14.368 patch contains the native package contract and proxy hooks', () => {
-    const packageSource = fs.readFileSync(path.join(root, 'package.mjs'), 'utf8');
-    const viewsSource = fs.readFileSync(path.join(root, 'views.mjs'), 'utf8');
+    const packageSource = readArchiveFile(archive, 'package.mjs');
+    const viewsSource = readArchiveFile(archive, 'views.mjs');
     assert.match(packageSource, /FOUNDRY_PACKAGE_INDEX_URL/);
     assert.match(packageSource, /FOUNDRY_PACKAGE_OWNED_URL/);
     assert.match(packageSource, /FOUNDRY_PACKAGE_DETAILS_URL/);
@@ -19,3 +19,4 @@ test('v14.368 patch contains the native package contract and proxy hooks', () =>
     assert.match(viewsSource, /export async function getPackages/);
     assert.doesNotMatch(viewsSource, /getRepositoryPackages\(\)/);
 });
+
