@@ -215,7 +215,7 @@ npm test
 python scripts/update-client-proxies.py
 ```
 
-测试直接读取仓库中的补丁压缩包，覆盖客户端入口和实际 HTTP 代理切换，不需要安装 FVTT 或访问公共代理节点。
+测试覆盖 FVTT 包数据转换和实际 HTTP 代理切换，不需要安装 FVTT 或访问公共代理节点。
 
 ## Docker 部署
 
